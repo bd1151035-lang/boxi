@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林柏希 (Lin Po-Hsi) | 個人主頁</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter & Noto Sans TC 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 50%, #e2e8f0 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.08);
+        }
+        /* Toast 提示框动画 */
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); }
+        }
+        .animate-toast {
+            animation: fadeInOut 2.5s forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-brand-100 selection:text-brand-700">
+
+    <!-- 顶部导航栏 -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80 transition-all">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <a href="#" class="text-xl font-bold tracking-tight text-slate-900 hover:text-brand-600 transition-colors">
+                林柏希 <span class="text-xs font-normal text-slate-500 hidden sm:inline-block">/ Po-Hsi Lin</span>
+            </a>
+            <nav class="flex items-center space-x-6 text-sm font-medium text-slate-600">
+                <a href="#about" class="hover:text-brand-600 transition-colors">關於我</a>
+                <a href="#skills" class="hover:text-brand-600 transition-colors">技能與興趣</a>
+                <a href="#contact" class="hover:text-brand-600 transition-colors">聯絡方式</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 sm:px-6 py-10 space-y-12">
+        
+        <!-- Hero & 关于我 区块 -->
+        <section id="about" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/70 shadow-sm card-hover">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                
+                <!-- 📸 互動式個人照片放置區（點擊即可從電腦/手機上傳更換） -->
+                <div class="relative flex-shrink-0 flex flex-col items-center">
+                    <!-- 隱藏的檔案上傳欄位 -->
+                    <input type="file" id="photo-upload-input" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
+                    
+                    <div onclick="document.getElementById('photo-upload-input').click()" 
+                         role="button" 
+                         tabindex="0"
+                         title="點擊上傳或更換您的個人照片"
+                         onkeydown="if(event.key==='Enter'||event.key===' ') document.getElementById('photo-upload-input').click()"
+                         class="relative group cursor-pointer w-40 h-40 sm:w-48 sm:h-48 rounded-2xl overflow-hidden bg-slate-100 border-4 border-white shadow-md focus:outline-none focus:ring-4 focus:ring-brand-500/30">
+                        
+                        <img id="profile-img" 
+                             src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400" 
+                             alt="林柏希的照片" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/e2e8f0/475569?text=Po-Hsi+Lin';"
+                        />
+                        
+                        <!-- 懸停與點擊提示遮罩 -->
+                        <div class="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white text-xs font-medium text-center p-3 backdrop-blur-[2px]">
+                            <i class="fa-solid fa-camera text-xl mb-1.5"></i>
+                            <span>點擊更換個人照片</span>
+                        </div>
+                    </div>
+
+                    <!-- 裝飾小底襯 -->
+                    <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-lg -z-10"></div>
+
+                    <!-- 重設預設照片按鈕（僅在已上傳自訂照片時顯示） -->
+                    <button id="reset-photo-btn" 
+                            onclick="resetPhoto()" 
+                            class="hidden mt-3 text-xs text-slate-400 hover:text-rose-500 transition-colors flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left"></i> 重設預設照片
+                    </button>
+                </div>
+
+                <!-- 个人主要资料 -->
+                <div class="flex-grow text-center md:text-left space-y-4">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-semibold mb-3 border border-brand-100">
+                            <i class="fa-solid fa-graduation-cap"></i> 黎明技術學院 數位多媒體系
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                            林柏希 <span class="text-lg text-slate-400 font-normal ml-2">Lin Po-Hsi</span>
+                        </h1>
+                    </div>
+
+                    <!-- 座右铭/一句话介绍 -->
+                    <blockquote class="text-slate-600 text-base sm:text-lg italic border-l-0 md:border-l-4 border-brand-500 pl-0 md:pl-4 py-1">
+                        「喜歡簡單生活，也喜歡認真對待每㇐件事。」
+                    </blockquote>
+
+                    <!-- 狀態與快捷連結 -->
+                    <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-3 text-xs font-medium text-slate-500">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 學生 / 開發者
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100">
+                            <i class="fa-solid fa-location-dot text-slate-400"></i> 新北市, 台灣
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技能与兴趣 Section -->
+        <section id="skills" class="grid md:grid-cols-2 gap-6">
+            
+            <!-- 核心技能 -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/70 shadow-sm card-hover flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center text-xl mb-6">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900 mb-2">專業技能</h2>
+                    <p class="text-sm text-slate-500 mb-6">在程式設計與邏輯演算領域保持探索與學習。</p>
+                    
+                    <div class="space-y-4">
+                        <!-- 技能 1 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-semibold text-slate-800 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-terminal text-brand-500"></i> 寫代碼 (Coding)
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-500">熱衷於建構簡潔網頁、邏輯實作與數位多媒體專案開發。</p>
+                        </div>
+                        
+                        <!-- 技能 2 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-semibold text-slate-800 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-square-root-variable text-brand-500"></i> 微積分 (Calculus)
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-500">具備嚴謹的分析思維、數學建模與問題推導能力。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 个人兴趣 -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/70 shadow-sm card-hover flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-6">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900 mb-2">興趣愛好</h2>
+                    <p class="text-sm text-slate-500 mb-6">簡約的生活方式，專注於能帶來平靜与充電的日常。</p>
+
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- 兴趣 1 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-start gap-4">
+                            <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
+                                <i class="fa-solid fa-book-open text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm">讀書</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">吸收新知，沉浸在書本的靜謐時光中。</p>
+                            </div>
+                        </div>
+
+                        <!-- 兴趣 2 -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-start gap-4">
+                            <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                                <i class="fa-solid fa-bed text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-800 text-sm">睡覺</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">充沛的休息是維持高效與好心情的关键。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系方式 Section -->
+        <section id="contact" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/70 shadow-sm card-hover">
+            <div class="max-w-2xl mx-auto text-center">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mx-auto mb-4">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">聯絡方式</h2>
+                <p class="text-slate-500 text-sm mb-8">歡迎隨時透過電子郵件或 Line 與我取得聯繫！</p>
+
+                <div class="grid sm:grid-cols-2 gap-4 text-left">
+                    
+                    <!-- Email 卡片 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 flex flex-col justify-between hover:border-brand-300 transition-colors">
+                        <div>
+                            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Email</div>
+                            <div class="text-slate-800 font-medium text-sm break-all mb-4">lancelim015@gmail.com</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <a href="mailto:lancelim015@gmail.com" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center transition-colors">
+                                發送郵件
+                            </a>
+                            <button onclick="copyToClipboard('lancelim015@gmail.com', 'Email 已成功複製！')" class="bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold py-2 px-3 rounded-xl transition-colors" title="複製 Email">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Line 卡片 -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/60 flex flex-col justify-between hover:border-emerald-300 transition-colors">
+                        <div>
+                            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Line ID</div>
+                            <div class="text-slate-800 font-medium text-sm break-all mb-4">5487707752</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="copyToClipboard('5487707752', 'Line ID 已成功複製！')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2 px-3 rounded-xl text-center transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-regular fa-copy"></i> 複製 Line ID
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-slate-200/80 py-8 text-center text-xs text-slate-400">
+        <div class="max-w-4xl mx-auto px-4">
+            <p>© <span id="year"></span> 林柏希 (Lin Po-Hsi). All rights reserved.</p>
+            <p class="mt-1 text-slate-400">黎明技術學院 數位多媒體系</p>
+        </div>
+    </footer>
+
+    <!-- Toast 复制成功提示浮层容器 -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- 交互脚本 -->
+    <script>
+        const DEFAULT_PHOTO_URL = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400";
+        const STORAGE_KEY = "lin_pohsi_profile_photo";
+
+        // 頁面載入時檢查是否有儲存的自訂照片
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
+            try {
+                const savedPhoto = localStorage.getItem(STORAGE_KEY);
+                if (savedPhoto) {
+                    document.getElementById('profile-img').src = savedPhoto;
+                    document.getElementById('reset-photo-btn').classList.remove('hidden');
+                }
+            } catch (e) {
+                console.warn('無法讀取本地儲存的照片:', e);
+            }
+        });
+
+        // 處理本地照片選擇與上傳預覽
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                showToast('請選擇有效的圖片檔案！');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                document.getElementById('profile-img').src = base64Image;
+                document.getElementById('reset-photo-btn').classList.remove('hidden');
+
+                try {
+                    localStorage.setItem(STORAGE_KEY, base64Image);
+                    showToast('照片已成功更新！');
+                } catch (err) {
+                    // 若圖片檔案過大超過 localStorage 限制，仍保留當次瀏覽預覽
+                    showToast('照片已預覽（檔案較大，重新整理後將恢復預設）');
+                }
+            };
+            reader.readAsDataURL(file);
+            event.target.value = ''; // 清空 input 以便重複選擇同一檔案
+        }
+
+        // 重設回預設照片
+        function resetPhoto() {
+            document.getElementById('profile-img').src = DEFAULT_PHOTO_URL;
+            document.getElementById('reset-photo-btn').classList.add('hidden');
+            try {
+                localStorage.removeItem(STORAGE_KEY);
+            } catch (e) {}
+            showToast('已恢復為預設照片');
+        }
+
+        // 复制到剪贴板功能
+        function copyToClipboard(text, successMessage) {
+            // 使用标准的 execCommand 作为兼容 fallback
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast(successMessage);
+            } catch (err) {
+                showToast('複製失敗，請手動複製');
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        // 显示 Toast 提示框
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 animate-toast pointer-events-auto';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> ${message}`;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

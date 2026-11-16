@@ -251,6 +251,35 @@
       font-size: 12px;
     }
 
+    /* 有照片時的懸浮遮罩與文字效果 */
+    .photo-upload.has-photo .photo-title,
+    .photo-upload.has-photo .photo-hint {
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      transition: opacity 160ms ease;
+    }
+
+    .photo-upload.has-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(32, 42, 39, 0.45);
+      opacity: 0;
+      transition: opacity 160ms ease;
+    }
+
+    .photo-upload.has-photo:hover .photo-title,
+    .photo-upload.has-photo:hover .photo-hint,
+    .photo-upload.has-photo:hover::after,
+    .photo-upload.has-photo:focus-within .photo-title,
+    .photo-upload.has-photo:focus-within .photo-hint,
+    .photo-upload.has-photo:focus-within::after {
+      opacity: 1;
+    }
+
     #photoPreview {
       position: absolute;
       inset: 0;
@@ -507,16 +536,14 @@
       </div>
 
       <div class="photo-card">
-  <label class="photo-upload" for="photoInput">
-    <input id="photoInput" type="file" accept="image/*" aria-label="選擇個人照片">
-    <!-- 占位图片：随便放一张清晰的自然景色照片 -->
-    <img id="photoPreview" alt="個人照片預覽" src="image_1.png">
-    <!-- 隐藏原图标和文字，并更新文字内容 -->
-    <span class="photo-icon" aria-hidden="true" hidden>＋</span>
-    <span class="photo-title">更換照片</span>
-    <span class="photo-hint">點擊此處重新選擇</span>
-  </label>
-</div>
+        <label class="photo-upload has-photo" for="photoInput">
+          <input id="photoInput" type="file" accept="image/*" aria-label="選擇個人照片">
+          <img id="photoPreview" alt="個人照片預覽" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80">
+          <span class="photo-icon" aria-hidden="true" hidden>＋</span>
+          <span class="photo-title">更換照片</span>
+          <span class="photo-hint">點擊此處重新選擇</span>
+        </label>
+      </div>
     </header>
 
     <section class="section" id="about">
@@ -564,11 +591,11 @@
         <p>歡迎與我聯繫。</p>
       </div>
       <div class="contact-card">
-        <a class="contact-item" href="mailto:bd1151035@gmail.lit.edu.tw.tw">
+        <a class="contact-item" href="mailto:bd1151035@gmail.lit.edu.tw">
           <span class="contact-icon" aria-hidden="true">✉</span>
           <span>
             <span class="contact-label">Email</span>
-            <span class="contact-value">bd1151035@gmail.lit.edu.tw.tw</span>
+            <span class="contact-value">bd1151035@gmail.lit.edu.tw</span>
           </span>
         </a>
         <div class="contact-item">

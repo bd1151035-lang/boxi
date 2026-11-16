@@ -507,14 +507,16 @@
       </div>
 
       <div class="photo-card">
-        <label class="photo-upload" for="photoInput">
-          <input id="photoInput" type="file" accept="image/*" aria-label="選擇個人照片">
-          <img id="photoPreview" alt="個人照片預覽" hidden>
-          <span class="photo-icon" aria-hidden="true">＋</span>
-          <span class="photo-title">放上你的照片</span>
-          <span class="photo-hint">點擊此處選擇圖片</span>
-        </label>
-      </div>
+  <label class="photo-upload" for="photoInput">
+    <input id="photoInput" type="file" accept="image/*" aria-label="選擇個人照片">
+    <!-- 占位图片：随便放一张清晰的自然景色照片 -->
+    <img id="photoPreview" alt="個人照片預覽" src="image_1.png">
+    <!-- 隐藏原图标和文字，并更新文字内容 -->
+    <span class="photo-icon" aria-hidden="true" hidden>＋</span>
+    <span class="photo-title">更換照片</span>
+    <span class="photo-hint">點擊此處重新選擇</span>
+  </label>
+</div>
     </header>
 
     <section class="section" id="about">
